@@ -3,10 +3,8 @@ import requests
 
 class Evcnet(object):
 
-    def __init__(self, url, username, password):
+    def __init__(self, url):
         self.__url = url
-        self.__username = username
-        self.__password = password
         self.__session = requests.session()
         self.__session.headers.update(
             {
@@ -14,13 +12,13 @@ class Evcnet(object):
             }
         )
 
-    def login(self):
+    def authenticate(self, username, password):
         # Login to get a cookie.
         r = self.__session.post(
             url=self.__url,
             data={
-                "emailField": self.__username,
-                "passwordField": self.__password,
+                "emailField": self.username,
+                "passwordField": self.password,
                 "Login": "Sign on",
             },
             allow_redirects=False,
@@ -31,6 +29,7 @@ class Evcnet(object):
                     r.status_code, r
                 )
             )
+        return True
 
     def total_usage(self):
         # Retrieve metric.
