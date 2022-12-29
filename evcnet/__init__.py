@@ -17,8 +17,8 @@ class Evcnet(object):
         r = self.__session.post(
             url=self.__url,
             data={
-                "emailField": self.username,
-                "passwordField": self.password,
+                "emailField": username,
+                "passwordField": password,
                 "Login": "Sign on",
             },
             allow_redirects=False,
