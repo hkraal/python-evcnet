@@ -3,8 +3,11 @@ import requests
 
 class Evcnet(object):
 
-    def __init__(self, url):
-        self.__url = url
+    def __init__(self, url, username, password):
+        self.url = url
+        self.username = username
+        self.password = password
+
         self.__session = requests.session()
         self.__session.headers.update(
             {
@@ -15,7 +18,7 @@ class Evcnet(object):
     def authenticate(self, username, password):
         # Login to get a cookie.
         r = self.__session.post(
-            url=self.__url,
+            url=self.url,
             data={
                 "emailField": username,
                 "passwordField": password,
@@ -37,6 +40,15 @@ class Evcnet(object):
             url=f"{self.__url}/api/ajax",
             params={
                 "requests": '{"0":{"handler":"\\\\LMS\\\\EV\\\\AsyncServices\\\\DashboardAsyncService","method":"totalUsage","params":{"mode":"customer","maxCache":3600}},"1":{"handler":"\\\\LMS\\\\EV\\\\AsyncServices\\\\DashboardAsyncService","method":"totalUsage","params":{"mode":"rechargeSpot","maxCache":3600}}}'
+    def request(self, method, params):
+        requests_ = [
+            {
+                'handler': '\\LMS\\EV\\AsyncServices\\DashboardAsyncService',
+                'method': 'totalUsage',
+                'params': {
+                    'mode': 'customer',
+                    'maxCache': 3600
+                }
             },
             allow_redirects=False,
         )
