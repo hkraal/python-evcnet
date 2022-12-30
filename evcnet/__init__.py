@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 
@@ -15,13 +17,13 @@ class Evcnet(object):
             }
         )
 
-    def authenticate(self, username, password):
+    def authenticate(self, username=None, password=None):
         # Login to get a cookie.
         r = self.__session.post(
             url=self.url,
             data={
-                "emailField": username,
-                "passwordField": password,
+                "emailField": username if username else self.username,
+                "passwordField": password if password else self.password,
                 "Login": "Sign on",
             },
             allow_redirects=False,
@@ -35,22 +37,16 @@ class Evcnet(object):
         return True
 
     def total_usage(self):
-        # Retrieve metric.
+        # Authenticate if required.
+        if not self.__session.cookies:
+            self.authenticate()
+
+        # Retrieve data.
         data_request = self.__session.get(
-            url=f"{self.__url}/api/ajax",
+            url=f"{self.url}/api/ajax",
             params={
                 "requests": '{"0":{"handler":"\\\\LMS\\\\EV\\\\AsyncServices\\\\DashboardAsyncService","method":"totalUsage","params":{"mode":"customer","maxCache":3600}},"1":{"handler":"\\\\LMS\\\\EV\\\\AsyncServices\\\\DashboardAsyncService","method":"totalUsage","params":{"mode":"rechargeSpot","maxCache":3600}}}'
-    def request(self, method, params):
-        requests_ = [
-            {
-                'handler': '\\LMS\\EV\\AsyncServices\\DashboardAsyncService',
-                'method': 'totalUsage',
-                'params': {
-                    'mode': 'customer',
-                    'maxCache': 3600
-                }
-            },
-            allow_redirects=False,
+            }
         )
         if data_request.status_code != 200:
             raise RuntimeError(
