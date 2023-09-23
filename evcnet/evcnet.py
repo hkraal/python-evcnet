@@ -58,9 +58,10 @@ class Evcnet(object):
 
         api_data = data_request.json()
 
+        usage, provided = api_data
         result = {
-            "totalUsage": api_data[0],
-            "totalProvided": api_data[1],
+            "totalUsage": int(usage["number"].replace(".", "")),
+            "totalProvided": int(provided["number"].replace(".", "")),
         }
 
         return result
