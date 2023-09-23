@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "evcnet"
-version = "0.1.1-a3"
+version = "0.1.1-a4"
 description = ""
 authors = ["Henk Kraal <hkraal@users.noreply.github.com>"]
 readme = "README.md"
